@@ -125,6 +125,7 @@ public class Utils {
             return list;
         }
 
+
         for(int i = 0; i < data.length(); i++ ) {
             for(int j = i+1; j<=data.length(); j++) {
                 String substr = data.substring(i,j);
@@ -137,9 +138,53 @@ public class Utils {
         return list;
     }
 
+    //1个字节＝2个16进制字符
+    public static List<String> getQualified2(String data){
+
+        //符合crc集合
+        List<String> list = new ArrayList<>();
+
+        if(data == null || data.length() <=0 ){
+            return list;
+        }
+
+        byte[] bytes = HexStringToHexBytes(data);
+
+
+        for(int i = 0; i < bytes.length; i++ ) {
+            for(int j = i+1; j<=bytes.length; j++) {
+                String substr = data.substring(i,j);
+                if(isCRC(HexStringToHexBytes(substr))){
+                    list.add(substr);
+                }
+            }
+        }
+
+        return list;
+    }
+
+
 
     public static void main(String[] args) {
-        String datas = "01030e01300000014a02030e01480000014c0000000000000064ca410000000000002030e01480000014c0000000000000064ca4100001030e01300000014a0000000000000064b16964b169";
+        String datas = "01030e01300000014a02030e01480000014c0000000000000064ca410000000000002030e01480000014c0000000000000064ca4100001030e01300000014a0000000000000064b16964b169+" +
+                "01030e01300000014a02030e01480000014c0000000000000064ca410000000000002030e01480000014c0000000000000064ca4100001030e01300000014a0000000000000064b16964b169";
         getQualified(datas).forEach(i-> System.err.println("合格："+i));
+
+        String s = "01030e01300000014a0000000000000064b169";
+        byte[] bytes = HexStringToHexBytes(s);
+        for (int i = 0; i < bytes.length; i++) {
+            byte aByte = bytes[i];
+            System.err.println(aByte+"");
+        }
+
+        String str = "30,31,30,33,30,437,30,31";
+        String[] split = str.split(",");
+        String stt = "";
+        for (int i = 0; i < split.length; i++) {
+            int b = Integer.parseInt(split[i].replaceAll("^0[x|X]", ""), 16);
+            stt = stt +(char)b+"";
+        }
+        System.err.println(stt);
+
     }
 }
