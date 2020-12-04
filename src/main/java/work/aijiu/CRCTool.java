@@ -82,9 +82,15 @@ public class CRCTool {
     }
 
     public static void main(String[] args) {
-        String s = "01030e01300000014a0000000000000064b169";
+        String s = "02030e01480000014c0000000000000064ca410000000000002";
         char[] chars = HexString2Bytes(s);
         String s1 = GetCheck(chars);
+
+
+        char[] chars1 = HexString2Bytes(s);
+        for (int i = 0; i < chars.length; i++) {
+            System.err.println(chars[i]);
+        }
         System.err.println(s1);
     }
 }
